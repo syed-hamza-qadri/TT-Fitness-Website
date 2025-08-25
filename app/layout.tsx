@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "T-FITNESS - Professional Fitness Equipment",
   description: "Professional-grade equipment trusted by Pakistan's elite institutions",
-    generator: 'v0.dev'
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
