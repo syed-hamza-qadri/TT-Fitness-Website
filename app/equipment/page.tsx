@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Eye, MessageCircle, ArrowLeft, Filter } from "lucide-react"
+import { ProductDetailDialog } from "@/components/product-detail-dialog"
 import Link from "next/link"
 
 const allEquipment = [
@@ -20,9 +21,15 @@ const allEquipment = [
     description:
       "Heavy-duty leg press machine designed for intensive commercial use with adjustable weight system and safety features.",
     keyFeatures: ["Heavy-Duty Steel Construction", "Adjustable Weight System (up to 500kg)", "Safety Lock Mechanism"],
+    features: ["Heavy-Duty Steel Construction", "Adjustable Weight System", "Safety Lock Mechanism"],
+    benefits: ["Builds leg strength", "Improves power output", "Safe heavy loading", "Targets multiple leg muscles"],
     specifications: {
       dimensions: "200cm x 150cm x 180cm",
       weight: "350kg",
+      maxLoad: "500kg",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
   {
@@ -35,9 +42,15 @@ const allEquipment = [
     description:
       "Professional seated rowing machine for comprehensive back and arm muscle development with smooth cable system.",
     keyFeatures: ["Smooth Cable System", "Adjustable Chest Pad", "Multiple Grip Options"],
+    features: ["Smooth Cable System", "Adjustable Chest Pad", "Multiple Grip Options"],
+    benefits: ["Strengthens back muscles", "Improves posture", "Builds upper body strength", "Low impact exercise"],
     specifications: {
       dimensions: "180cm x 120cm x 160cm",
       weight: "280kg",
+      maxLoad: "200kg",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
   {
@@ -50,9 +63,15 @@ const allEquipment = [
     description:
       "Professional hack squat machine for safe and effective lower body training with angled platform design.",
     keyFeatures: ["Angled Platform Design", "Safety Lock System", "Non-Slip Footplate"],
+    features: ["Angled Platform Design", "Safety Lock System", "Non-Slip Footplate"],
+    benefits: ["Strengthens calf muscles", "Improves ankle stability", "Builds lower leg power", "Low impact exercise"],
     specifications: {
       dimensions: "220cm x 140cm x 200cm",
       weight: "400kg",
+      maxLoad: "300kg",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
   {
@@ -65,9 +84,20 @@ const allEquipment = [
     description:
       "Versatile cable rowing system for functional strength training and rehabilitation with multi-angle training capability.",
     keyFeatures: ["Multi-Angle Training", "Smooth Cable Operation", "Adjustable Height"],
+    features: ["Multi-Angle Training", "Smooth Cable Operation", "Adjustable Height"],
+    benefits: [
+      "Functional movement training",
+      "Multiple exercise angles",
+      "Smooth cable operation",
+      "Versatile attachments",
+    ],
     specifications: {
       dimensions: "160cm x 100cm x 200cm",
       weight: "250kg",
+      maxLoad: "100kg per side",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
   {
@@ -80,9 +110,20 @@ const allEquipment = [
     description:
       "Premium lat pulldown machine for comprehensive upper body and back development with adjustable thigh pads.",
     keyFeatures: ["Adjustable Thigh Pads", "Multiple Grip Positions", "Smooth Pulley System"],
+    features: ["Adjustable Thigh Pads", "Multiple Grip Positions", "Smooth Pulley System"],
+    benefits: [
+      "Strengthens back muscles",
+      "Improves posture",
+      "Builds upper body strength",
+      "Versatile exercise options",
+    ],
     specifications: {
       dimensions: "170cm x 130cm x 220cm",
       weight: "320kg",
+      maxLoad: "200kg",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
   {
@@ -94,9 +135,20 @@ const allEquipment = [
     type: "cardio",
     description: "Professional-grade commercial treadmill with advanced features for high-traffic gym environments.",
     keyFeatures: ["Powerful AC Motor", "Large Running Surface", "Advanced Console"],
+    features: ["Powerful AC Motor", "Large Running Surface", "Advanced Console"],
+    benefits: [
+      "Improves cardiovascular health",
+      "Burns calories efficiently",
+      "Multiple workout programs",
+      "Low impact option",
+    ],
     specifications: {
       dimensions: "200cm x 90cm x 160cm",
       weight: "180kg",
+      maxLoad: "150kg",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
   {
@@ -109,9 +161,15 @@ const allEquipment = [
     description:
       "Complete multi-station gym system allowing multiple users to train simultaneously with various exercise options.",
     keyFeatures: ["Multiple Exercise Stations", "Independent Weight Stacks", "Space Efficient Design"],
+    features: ["Multiple Exercise Stations", "Independent Weight Stacks", "Space Efficient Design"],
+    benefits: ["Full body workout", "Multiple exercise options", "Smooth cable system", "Space efficient design"],
     specifications: {
       dimensions: "400cm x 300cm x 220cm",
       weight: "800kg",
+      maxLoad: "150kg per station",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
   {
@@ -124,9 +182,20 @@ const allEquipment = [
     description:
       "Professional Olympic bench press with safety features and adjustable settings for serious strength training.",
     keyFeatures: ["Olympic Barbell Compatible", "Adjustable Safety Bars", "Heavy-Duty Construction"],
+    features: ["Olympic Barbell Compatible", "Adjustable Safety Bars", "Heavy-Duty Construction"],
+    benefits: [
+      "Targets multiple muscle groups",
+      "Improves upper body strength",
+      "Enhances muscle definition",
+      "Versatile training options",
+    ],
     specifications: {
       dimensions: "180cm x 140cm x 130cm",
       weight: "120kg",
+      maxLoad: "180kg",
+      warranty: "2 Years",
+      certification: "ISO 9001",
+      price: "Contact for Quote",
     },
   },
 ]
@@ -134,6 +203,8 @@ const allEquipment = [
 export default function EquipmentCatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Equipment")
   const [filteredEquipment, setFilteredEquipment] = useState(allEquipment)
+  const [selectedProduct, setSelectedProduct] = useState<any>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const categories = ["All Equipment", "Strength Training", "Cardio Equipment", "Functional Training"]
 
@@ -149,6 +220,16 @@ export default function EquipmentCatalogPage() {
       }
       setFilteredEquipment(allEquipment.filter((item) => item.type === typeMap[category]))
     }
+  }
+
+  const handleViewDetails = (product: any) => {
+    setSelectedProduct(product)
+    setIsDialogOpen(true)
+  }
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false)
+    setSelectedProduct(null)
   }
 
   return (
@@ -208,7 +289,7 @@ export default function EquipmentCatalogPage() {
             {filteredEquipment.map((equipment) => (
               <Card
                 key={equipment.id}
-                className="bg-white border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300"
+                className="bg-white border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full"
               >
                 <div className="aspect-square relative overflow-hidden bg-gray-50">
                   <img
@@ -219,21 +300,22 @@ export default function EquipmentCatalogPage() {
                   <div className="absolute top-4 right-4">
                     <Badge className="bg-red-600 text-white">{equipment.category}</Badge>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">{equipment.name}</h3>
-                    <p className="text-red-600 font-semibold">Contact for Quote</p>
-                  </div>
                 </div>
 
-                <CardContent className="p-6">
-                  <p className="text-gray-600 mb-4 text-sm leading-relaxed">{equipment.description}</p>
+                <CardContent className="p-6 flex flex-col flex-grow">
+                  <div className="mb-4">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{equipment.name}</h3>
+                    <p className="text-red-600 font-semibold">Contact for Quote</p>
+                  </div>
+
+                  <p className="text-gray-600 mb-4 text-sm leading-relaxed flex-grow">{equipment.description}</p>
 
                   <div className="mb-4">
                     <h4 className="font-semibold text-gray-900 mb-2">Key Features:</h4>
                     <ul className="space-y-1">
-                      {equipment.keyFeatures.map((feature, idx) => (
+                      {equipment.keyFeatures.slice(0, 3).map((feature, idx) => (
                         <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
-                          <div className="w-1.5 h-1.5 bg-red-600 rounded-full"></div>
+                          <div className="w-1.5 h-1.5 bg-red-600 rounded-full flex-shrink-0"></div>
                           {feature}
                         </li>
                       ))}
@@ -254,8 +336,11 @@ export default function EquipmentCatalogPage() {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
-                    <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
+                  <div className="flex gap-2 mt-auto">
+                    <Button
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                      onClick={() => handleViewDetails(equipment)}
+                    >
                       <Eye className="w-4 h-4 mr-2" />
                       Full Details
                     </Button>
@@ -269,6 +354,11 @@ export default function EquipmentCatalogPage() {
           </div>
         </div>
       </section>
+
+      {/* Product Detail Dialog */}
+      {selectedProduct && (
+        <ProductDetailDialog isOpen={isDialogOpen} onClose={handleCloseDialog} product={selectedProduct} />
+      )}
 
       <Footer />
     </div>

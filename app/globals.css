@@ -68,6 +68,11 @@
   }
 }
 
+/* Performance optimizations */
+img {
+  content-visibility: auto;
+}
+
 /* Simple v0 badge hiding - performance optimized */
 div[style*="position: fixed"][style*="bottom"][style*="right"] {
   display: none !important;

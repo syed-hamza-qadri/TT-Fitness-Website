@@ -1,75 +1,79 @@
+import { memo } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Star, Trophy } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Award, Users, Clock, MapPin } from "lucide-react"
 
-export function AboutSection() {
+const stats = [
+  { icon: Award, value: "13+", label: "Years Experience" },
+  { icon: Users, value: "500+", label: "Happy Clients" },
+  { icon: Clock, value: "24/7", label: "Support Available" },
+  { icon: MapPin, value: "50+", label: "Cities Served" },
+]
+
+export const AboutSection = memo(function AboutSection() {
   return (
     <section id="about" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 text-gray-900">
-            LEADERSHIP <span className="text-red-600">EXCELLENCE</span>
-          </h2>
-          <div className="w-24 h-1 bg-red-600 mx-auto mb-6"></div>
-          <p className="text-xl text-gray-600">Meet the champions behind T-Fitness</p>
-        </div>
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <Badge className="bg-red-100 text-red-600 mb-6">About T-FITNESS</Badge>
+            <h2 className="text-4xl md:text-6xl font-black mb-6 text-gray-900">
+              BUILDING <span className="text-red-600">STRONGER</span> PAKISTAN
+            </h2>
+            <div className="w-24 h-1 bg-red-600 mb-6"></div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          <Card className="bg-white border-gray-200 overflow-hidden shadow-lg">
-            <div className="bg-gradient-to-r from-red-600 to-red-700 p-8 text-white">
-              <h3 className="text-3xl font-black mb-2">CEO</h3>
-              <h4 className="text-2xl font-bold mb-2">Mr. Tariq Zafar</h4>
-              <p className="text-red-100">National Champion & Gold Medalist</p>
-              <Badge className="bg-red-800 text-white mt-4">CM Balochistan Award Holder</Badge>
-            </div>
-            <CardContent className="p-8">
-              <p className="text-gray-700 leading-relaxed mb-6">
-                Secretary General Pakistan Bodybuilding Federation, President Sindh Bodybuilding Association. CEO with 8
-                Mr Pakistan Titles and international recognition.
-              </p>
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-3xl font-black text-red-600">4</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Gold Medals</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-black text-red-600">8</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Mr Pakistan Titles</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-black text-red-600">13+</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Years Experience</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              Since 2011, T-FITNESS has been Pakistan's leading provider of professional fitness equipment and complete
+              facility solutions. We've equipped the nation's elite institutions with world-class fitness facilities.
+            </p>
 
-          <Card className="bg-white border-gray-200 overflow-hidden shadow-lg">
-            <div className="bg-gradient-to-r from-gray-700 to-gray-800 p-8 text-white">
-              <h3 className="text-3xl font-black mb-2">MD</h3>
-              <h4 className="text-2xl font-bold mb-2">Mr. Aamirullah Khan</h4>
-              <p className="text-gray-200">Managing Director & International Coach</p>
-              <Badge className="bg-gray-600 text-white mt-4">IFBB Certified</Badge>
-            </div>
-            <CardContent className="p-8">
-              <p className="text-gray-700 leading-relaxed mb-6">
-                International fitness coach and IFBB Chairman, owner of Body Matters Gym. Instrumental in guiding
-                countless individuals towards healthier lifestyles.
-              </p>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <span className="text-gray-700">IFBB International Judge</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Trophy className="w-5 h-5 text-yellow-500" />
-                  <span className="text-gray-700">Fitness Industry Leader</span>
-                </div>
+            <div className="space-y-4 mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+                <span className="text-gray-700">ISO 9001 Certified Quality Management</span>
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+                <span className="text-gray-700">Nationwide Service Network</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+                <span className="text-gray-700">Professional Installation & Training</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+                <span className="text-gray-700">Comprehensive Warranty & Support</span>
+              </div>
+            </div>
+
+            <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 text-lg font-bold">
+              Learn More About Us
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            {stats.map((stat, index) => {
+              const IconComponent = stat.icon
+              return (
+                <Card
+                  key={index}
+                  className="bg-gradient-to-br from-red-50 to-white border-red-100 hover:shadow-lg transition-all duration-300"
+                >
+                  <CardContent className="p-6 text-center">
+                    <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <IconComponent className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="text-3xl font-black text-gray-900 mb-2">{stat.value}</div>
+                    <div className="text-gray-600 font-medium">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>
   )
-}
+})

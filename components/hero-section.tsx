@@ -42,50 +42,22 @@ const slides = [
 
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [isLoaded, setIsLoaded] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
-  // Preload images for better performance
-  useEffect(() => {
-    const preloadImages = async () => {
-      const imagePromises = slides.map((slide) => {
-        return new Promise((resolve, reject) => {
-          const img = new Image()
-          img.crossOrigin = "anonymous"
-          img.onload = resolve
-          img.onerror = reject
-          img.src = slide.image
-        })
-      })
-
-      try {
-        await Promise.all(imagePromises)
-        setIsLoaded(true)
-      } catch (error) {
-        console.error("Error preloading images:", error)
-        setIsLoaded(true)
-      }
-    }
-
-    preloadImages()
-  }, [])
-
-  // Smooth slide change with transition state
+  // Optimized slide change with faster transition
   const nextSlide = useCallback(() => {
     setIsTransitioning(true)
     setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
       setIsTransitioning(false)
-    }, 300)
+    }, 200) // Reduced from 300ms to 200ms
   }, [])
 
-  // Auto-advance slides with longer duration
+  // Auto-advance slides
   useEffect(() => {
-    if (!isLoaded) return
-
-    const timer = setInterval(nextSlide, 6000) // Increased from 5000 to 6000ms
+    const timer = setInterval(nextSlide, 5000) // Reduced from 6000ms to 5000ms
     return () => clearInterval(timer)
-  }, [isLoaded, nextSlide])
+  }, [nextSlide])
 
   // Memoize current slide data
   const currentSlideData = useMemo(() => slides[currentSlide], [currentSlide])
@@ -98,22 +70,11 @@ export function HeroSection() {
         setTimeout(() => {
           setCurrentSlide(index)
           setIsTransitioning(false)
-        }, 300)
+        }, 200) // Reduced from 300ms to 200ms
       }
     },
     [currentSlide],
   )
-
-  if (!isLoaded) {
-    return (
-      <section className="relative min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="animate-pulse">
-          <div className="h-16 bg-gray-300 rounded w-96 mb-4"></div>
-          <div className="h-8 bg-gray-300 rounded w-80"></div>
-        </div>
-      </section>
-    )
-  }
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -121,16 +82,17 @@ export function HeroSection() {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+            className={`absolute inset-0 transition-all duration-700 ease-in-out ${
               index === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
           >
             <img
               alt={slide.alt}
-              className="object-cover object-center w-full h-full transition-transform duration-1000 ease-in-out"
+              className="object-cover object-center w-full h-full transition-transform duration-700 ease-in-out"
               src={slide.image || "/placeholder.svg"}
               loading={index === 0 ? "eager" : "lazy"}
               decoding="async"
+              fetchPriority={index === 0 ? "high" : "low"}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/60"></div>
           </div>
@@ -142,26 +104,26 @@ export function HeroSection() {
           <div className="mb-8">
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-black leading-none mb-4">
               <span
-                className={`text-gray-900 block transition-all duration-700 ease-in-out transform ${
-                  isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+                className={`text-gray-900 block transition-all duration-500 ease-in-out transform ${
+                  isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
                 }`}
               >
                 {currentSlideData.title}
               </span>
               <span
-                className={`text-red-600 block transition-all duration-700 ease-in-out transform delay-100 ${
-                  isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+                className={`text-red-600 block transition-all duration-500 ease-in-out transform delay-75 ${
+                  isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
                 }`}
               >
                 {currentSlideData.titleHighlight}
               </span>
             </h1>
-            <div className="w-24 h-1 bg-red-600 mb-6 transition-all duration-500"></div>
+            <div className="w-24 h-1 bg-red-600 mb-6 transition-all duration-300"></div>
           </div>
 
           <p
-            className={`text-xl md:text-2xl text-gray-700 mb-8 max-w-2xl font-light leading-relaxed transition-all duration-700 ease-in-out transform delay-200 ${
-              isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+            className={`text-xl md:text-2xl text-gray-700 mb-8 max-w-2xl font-light leading-relaxed transition-all duration-500 ease-in-out transform delay-150 ${
+              isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
             }`}
           >
             {currentSlideData.description}
@@ -182,7 +144,7 @@ export function HeroSection() {
               </SelectContent>
             </Select>
 
-            <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 text-lg font-bold uppercase tracking-wide h-14 transition-all duration-300 hover:scale-105">
+            <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 text-lg font-bold uppercase tracking-wide h-14 transition-all duration-200 hover:scale-105">
               Explore Equipment
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
@@ -193,7 +155,7 @@ export function HeroSection() {
               <button
                 key={index}
                 onClick={() => handleSlideSelect(index)}
-                className={`h-1 transition-all duration-500 ease-in-out ${
+                className={`h-1 transition-all duration-300 ease-in-out ${
                   index === currentSlide ? "w-12 bg-red-600" : "w-8 bg-gray-400 hover:bg-gray-500"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}

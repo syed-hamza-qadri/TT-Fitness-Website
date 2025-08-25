@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, memo } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
@@ -227,7 +227,53 @@ const equipmentData = {
   ],
 }
 
-export function EquipmentSection() {
+const EquipmentCard = memo(function EquipmentCard({
+  item,
+  onViewDetails,
+}: {
+  item: any
+  onViewDetails: (item: any) => void
+}) {
+  return (
+    <Card className="bg-white border-gray-200 overflow-hidden group hover:border-red-500 hover:shadow-xl transition-all duration-300">
+      <div className="aspect-square relative overflow-hidden bg-gray-50">
+        <img
+          alt={item.name}
+          className="object-contain group-hover:scale-110 transition-transform duration-500 w-full h-full p-4"
+          src={item.image || "/placeholder.svg"}
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="absolute top-4 right-4">
+          <Badge className="bg-red-600 text-white">{item.category}</Badge>
+        </div>
+      </div>
+      <CardContent className="p-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
+        <div className="text-red-600 font-semibold mb-4">Contact for Quote</div>
+        <div className="space-y-2 mb-4">
+          {item.features.map((feature: string, idx: number) => (
+            <div key={idx} className="flex items-center gap-2">
+              <CircleCheckBig className="w-4 h-4 text-red-600" />
+              <span className="text-gray-700 text-sm">{feature}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white" onClick={() => onViewDetails(item)}>
+            <Eye className="w-4 h-4 mr-2" />
+            View Details
+          </Button>
+          <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent">
+            <MessageCircle className="w-4 h-4" />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+})
+
+export const EquipmentSection = memo(function EquipmentSection() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -285,48 +331,7 @@ export function EquipmentSection() {
           <TabsContent value="strength">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {equipmentData.strength.map((item, index) => (
-                <Card
-                  key={index}
-                  className="bg-white border-gray-200 overflow-hidden group hover:border-red-500 hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="aspect-square relative overflow-hidden bg-gray-50">
-                    <img
-                      alt={item.name}
-                      className="object-contain group-hover:scale-110 transition-transform duration-500 w-full h-full p-4"
-                      src={item.image || "/placeholder.svg"}
-                    />
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-red-600 text-white">{item.category}</Badge>
-                    </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
-                    <div className="text-red-600 font-semibold mb-4">Contact for Quote</div>
-                    <div className="space-y-2 mb-4">
-                      {item.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <CircleCheckBig className="w-4 h-4 text-red-600" />
-                          <span className="text-gray-700 text-sm">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-                        onClick={() => handleViewDetails(item)}
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        View Details
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <EquipmentCard key={index} item={item} onViewDetails={handleViewDetails} />
               ))}
             </div>
           </TabsContent>
@@ -343,6 +348,8 @@ export function EquipmentSection() {
                       alt={item.name}
                       className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full"
                       src={item.image || "/placeholder.svg"}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     <div className="absolute top-4 right-4">
@@ -395,6 +402,8 @@ export function EquipmentSection() {
                       alt={item.name}
                       className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full"
                       src={item.image || "/placeholder.svg"}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     <div className="absolute top-4 right-4">
@@ -452,4 +461,4 @@ export function EquipmentSection() {
       )}
     </section>
   )
-}
+})
